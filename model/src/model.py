@@ -26,20 +26,22 @@ prompt = (
 
 inputs = tokenizer(prompt, return_tensors="pt").to(device)
 
-start = time.time()
-with torch.no_grad():
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=200,
-        do_sample=True,
-        temperature=0.8,
-        top_p=0.95,
-        top_k=50,
-        repetition_penalty=1.2,
-        pad_token_id=tokenizer.eos_token_id
-    )
-end = time.time()
 
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print("Model response:\n", response)
-print(f"\nInference time: {end - start:.2f}s")
+for i in range(5):
+    start = time.time()
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=200,
+            do_sample=True,
+            temperature=0.8,
+            top_p=0.95,
+            top_k=50,
+            repetition_penalty=1.2,
+            pad_token_id=tokenizer.eos_token_id
+        )
+    end = time.time()
+
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    print("Model response:\n", response)
+    print(f"\nInference time: {end - start:.2f}s")
