@@ -2,6 +2,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch, time, random, numpy as np
 import csv, os
 import logging
+from termcolor import colored
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Config
 model_name = "distilgpt2"
@@ -51,6 +54,9 @@ with open(csv_path, mode="w", newline="") as file:
     for round_idx in range(num_rounds):
         times = []
         tps = []
+        elapsed_prev = 999 # Set to arbitrary large value
+        tps_prev = 999 # Set to arbitrary large value
+
         print(f"\nRound {round_idx + 1}/{num_rounds}")
         for i in range(runs_per_round):
             start = time.perf_counter()
@@ -67,6 +73,7 @@ with open(csv_path, mode="w", newline="") as file:
                 )
             end = time.perf_counter()
 
+
             elapsed = end - start
             times.append(elapsed)
             
@@ -77,8 +84,14 @@ with open(csv_path, mode="w", newline="") as file:
             # Append tokens per second
             tps.append(tokens_per_sec)
 
-            print(f"\tRun {i+1}: {elapsed:.3f}s | Tokens/sec: {tokens_per_sec:.1f}")
-            print("\tResponse preview:", response[:80].replace("\n", " ") + "...")
+            time_output_color = "red" if (elapsed > elapsed_prev) else "light_green"
+            tps_output_color = "red" if (tps[i] > tps_prev) else "light_green"
+
+            print(f"\tRun {i + 1}: {colored(f'{elapsed:.3f}', time_output_color)}s | Tokens/sec: {colored(f'{tokens_per_sec:.1f}', tps_output_color)}")
+            # print("\tResponse preview:", response[:80].replace("\n", " ") + "...")
+
+            elapsed_prev = elapsed
+            tps_prev = tps[i]
 
             # Log this run
             writer.writerow([
@@ -115,4 +128,4 @@ with open(csv_path, mode="w", newline="") as file:
     writer.writerow([])
 
 
-logging.info("\n Benchmarking complete. Results saved to", csv_path)
+logging.info(f"\nBenchmarking complete. Results saved to {csv_path}")
