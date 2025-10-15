@@ -109,9 +109,7 @@ with open(csv_path, mode="w", newline="") as file:
 
         print(f"→ Round average: {round_avg:.3f}s ± {round_std:.3f}s")
 
-        # Update previous rows for this round with avg/std
-        # (optional refinement – you can skip this if unnecessary)
-        # For now, write summary line for this round:
+        # For now, write summary line for this round (optional refinement):
         writer.writerow([
             "ROUND SUMMARY", model_name, device, round_idx + 1, "", 
             f"{round_avg:.4f}", f"{round_std:.4f}", "", "", f"{tokens_per_sec_avg:.4f}", "", "", "", "", ""
