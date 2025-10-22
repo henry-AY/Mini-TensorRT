@@ -3,17 +3,29 @@ import torch, time, random, numpy as np
 import csv, os
 import logging
 from termcolor import colored
+import argparse
+
+
+# Parsing command-line arguments
+parser = argparse.ArgumentParser(description="command-line arguments for model benchmarking")
+
+parser.add_argument("--model", type=str, default="distilgpt2", help="HuggingFace model name")
+parser.add_argument("--device", type=str, default="cpu", help="Device to run model on (CPU, MPS, CUDA/ROCm)")
+parser.add_argument("--runs", type=int, default=10, help="number of total runs for benchmarking")
+parser.add_argument("--seed", type=int, default=42, help="seed choice (default of 42)")
+
+args = parser.parse_args()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Config
-model_name = "distilgpt2"
-device = "cpu"
+model_name = args.model
+device = args.device
 seed = 42
-num_rounds = 10
-runs_per_round = 5
+num_rounds = args.runs
+runs_per_round = 5 # Default set to 5
 max_new_tokens = 200
-csv_path = "benchmark_results.csv"
+csv_path = "model/benchmark/benchmark_results.csv"
 
 torch.manual_seed(seed)
 np.random.seed(seed)
