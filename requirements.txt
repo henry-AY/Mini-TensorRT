@@ -9,3 +9,4 @@ requests==2.32.5
 safetensors==0.6.2
 huggingface-hub==0.35.3
 tokenizers==0.22.1
+notebook
