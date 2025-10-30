@@ -13,12 +13,14 @@ parser.add_argument("--model", type=str, default="distilgpt2", help="HuggingFace
 parser.add_argument("--device", type=str, default="cpu", help="Device to run model on (CPU, MPS, CUDA/ROCm)")
 parser.add_argument("--runs", type=int, default=10, help="number of total runs for benchmarking")
 parser.add_argument("--seed", type=int, default=42, help="seed choice (default of 42)")
+parser.add_argument("--trace", type=bool, default=False, help="Export PyTorch model")
 
 args = parser.parse_args()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Config
+TRACED = args.trace
 model_name = args.model
 device = args.device
 seed = 42

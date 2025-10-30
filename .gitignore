@@ -1,2 +1,3 @@
 venv/
 model/src/.ipynb_checkpoints
+export_models/

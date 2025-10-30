@@ -10,3 +10,5 @@ safetensors==0.6.2
 huggingface-hub==0.35.3
 tokenizers==0.22.1
 notebook
+onnx>=1.19.1
+onnxscript>=0.5.4
